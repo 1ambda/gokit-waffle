@@ -4,6 +4,7 @@ import:
   version: ~0.3.0
 - package: github.com/pkg/errors
   version: ~0.8.0
+- package: github.com/alexflint/go-arg
 testImport:
 - package: github.com/onsi/ginkgo
   version: ~1.2.0
