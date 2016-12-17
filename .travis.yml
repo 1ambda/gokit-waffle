@@ -1,0 +1,20 @@
+language: go
+
+go:
+  - 1.7
+  - master
+  - tip
+
+env:
+  - SERVER_APP=waffle-server CLIENT_APP=waffle-client
+
+cache:
+  directories:
+    - $SERVER_APP/vendor 
+
+install:
+  - mkdir -p $GOPATH/bin
+  - cd $SERVER_APP && make install && cd $TRAVIS_BUILD_DIR
+
+script:
+  - cd $SERVER_APP && make build && cd $TRAVIS_BUILD_DIR
