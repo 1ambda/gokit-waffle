@@ -1,23 +1,24 @@
-GOARCH		= amd64
+GOARCH  = amd64
+GOOS    = $(OS)
 
-ifeq ($(OS),)
+ifeq ($(GOOS),)
   ifeq ($(shell  uname -s), Darwin)
     GOOS	= darwin
   else
     GOOS	= linux
   endif
-else
-  GOOS		= $(OS)
 endif
 
-GOCMD		= GOOS=$(GOOS) GOARCH=$(GOARCH) go
-GOBUILD	= $(GOCMD) build
+GOCMD		= go
+GOBUILD	= GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build
 GOTEST	= ginkgo -r -cover
-GOTOOL	= go tool cover
-GOGET		= go get
+GOTOOL	= $(GOCMD) tool cover
+GOGET		= $(GOCMD) get -u -v
 GODEP		= glide
 RM			= rm -rf
-APP			= WaffleServer
+
+APP			  = WaffleServer
+DIST_DIR  = dist
 
 # build flags
 VERSION   = "0.0.1"
@@ -25,26 +26,37 @@ GITSHA		= $(shell git rev-parse HEAD)
 BUILDDATE	= $(shell TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ')
 LDFLAGS   = -ldflags="-X main.GitHash=${GITSHA} -X main.BuildTime=${BUILDDATE} -X main.Version=${VERSION}"
 
-
 # build commands
-.PHONY		: all install build test clean fclean
+.PHONY: all install build build-all test run clean fclean
 
-all		: fclean install build test
+all: fclean install build-all test
 
-install :
-		curl https://glide.sh/get | sh
-		$(GODEP) install
-		$(GOGET) github.com/onsi/ginkgo/ginkgo
+install:
+	$(GOGET) github.com/Masterminds/glide # for dep
+	$(GOGET) github.com/onsi/ginkgo/ginkgo # for test
+	$(GOGET) github.com/franciscocpg/gox # for cross compile
+	$(GODEP) install
 
-build		:
-		$(GOBUILD) $(LDFLAGS) -o $(APP) -v ./main.go
+build: clean
+	$(GOBUILD) $(LDFLAGS) -o ${DIST_DIR}/${GOOS}-${GOARCH}/${APP} -v ./main.go
 
-test		:
-		$(GOTEST)
+build-all: clean
+	gox -verbose \
+	$(LDFLAGS) \
+	-os="linux darwin windows freebsd openbsd netbsd" \
+	-arch="amd64 386 armv5 armv6 armv7 arm64" \
+	-osarch="!darwin/arm64" \
+	-output="${DIST_DIR}/{{.OS}}-{{.Arch}}/${APP}" .
 
-clean		:
-		find . -type f -name '*.coverprofile' -exec rm {} +
-		$(RM) $(APP)
+test:
+	$(GOTEST)
 
-fclean  : clean
-		$(RM) vendor
+run:
+	./${DIST_DIR}/${GOOS}-${GOARCH}/${APP}
+
+clean:
+	find . -type f -name '*.coverprofile' -exec rm {} +
+	$(RM) ${DIST_DIR}
+
+fclean: clean
+	$(RM) vendor
