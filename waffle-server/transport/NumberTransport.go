@@ -9,8 +9,8 @@ import (
 	"golang.org/x/net/context"
 )
 
-func DecodeGenerateRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var req message.GenerateRequest
+func DecodeInsertRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var req message.InsertRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, err
@@ -19,6 +19,6 @@ func DecodeGenerateRequest(_ context.Context, r *http.Request) (interface{}, err
 	return req, nil
 }
 
-func EncodeGenerateResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
+func EncodeInsertResponse(_ context.Context, w http.ResponseWriter, response interface{}) error {
 	return json.NewEncoder(w).Encode(response)
 }

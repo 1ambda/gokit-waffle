@@ -8,12 +8,12 @@ import (
 	"golang.org/x/net/context"
 )
 
-func CreateGenerationEndpoint(svc service.NumberService) endpoint.Endpoint {
+func CreateInsertionEndpoint(svc service.NumberService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(message.GenerateRequest)
+		req := request.(message.InsertRequest)
 
-		msg, err := svc.Generate(req.User, req.Number)
-		res := message.GenerateResponse{
+		msg, err := svc.Insert(req.User, req.Number)
+		res := message.InsertResponse{
 			Message: msg, Error: "",
 		}
 

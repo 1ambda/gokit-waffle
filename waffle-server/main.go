@@ -38,13 +38,13 @@ func main() {
 	ctx := context.Background()
 	svc := service.NumberServiceInst{}
 
-	generateHandler := httptransport.NewServer(
+	insertHandler := httptransport.NewServer(
 		ctx,
-		endpoint.CreateGenerationEndpoint(svc),
-		transport.DecodeGenerateRequest,
-		transport.EncodeGenerateResponse,
+		endpoint.CreateInsertionEndpoint(svc),
+		transport.DecodeInsertRequest,
+		transport.EncodeInsertResponse,
 	)
 
-	http.Handle("/api/v1/generate", generateHandler)
-	logger.Log("error", http.ListenAndServe(env.Port, generateHandler))
+	http.Handle("/api/v1/insert", insertHandler)
+	logger.Log("error", http.ListenAndServe(env.Port, insertHandler))
 }
