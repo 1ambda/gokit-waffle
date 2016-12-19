@@ -21,10 +21,11 @@ APP			  = WaffleServer
 DIST_DIR  = dist
 
 # build flags
-VERSION   = "0.0.1"
+IMPORTPATH	= "github.com/1ambda/gokit-waffle/waffle-server"
+VERSION		= "0.0.1"
 GITSHA		= $(shell git rev-parse HEAD)
-BUILDDATE	= $(shell TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ')
-LDFLAGS   = -ldflags="-X main.GitHash=${GITSHA} -X main.BuildTime=${BUILDDATE} -X main.Version=${VERSION}"
+BUILDTIME	= $(shell TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ')
+LDFLAGS		= -ldflags="-X ${IMPORTPATH}/config.GitHash=${GITSHA} -X ${IMPORTPATH}/config.BuildTime=${BUILDTIME} -X ${IMPORTPATH}/config.Version=${VERSION}"
 
 # build commands
 .PHONY: all install build build-all test run clean fclean
