@@ -5,12 +5,9 @@ import (
 	"os"
 
 	"github.com/1ambda/gokit-waffle/waffle-server/config"
-	"github.com/1ambda/gokit-waffle/waffle-server/endpoint"
 	"github.com/1ambda/gokit-waffle/waffle-server/service"
-	"github.com/1ambda/gokit-waffle/waffle-server/transport"
 
 	"github.com/go-kit/kit/log"
-	httptransport "github.com/go-kit/kit/transport/http"
 	"golang.org/x/net/context"
 )
 
@@ -36,15 +33,7 @@ func main() {
 
 	// Start
 	ctx := context.Background()
-	svc := service.NumberServiceInst{}
 
-	insertHandler := httptransport.NewServer(
-		ctx,
-		endpoint.CreateInsertionEndpoint(svc),
-		transport.DecodeInsertRequest,
-		transport.EncodeInsertResponse,
-	)
-
-	http.Handle("/api/v1/insert", insertHandler)
-	logger.Log("error", http.ListenAndServe(env.Port, insertHandler))
+	http.Handle("/api/v1/insert", service.CreateInsertHandler(ctx))
+	logger.Log("error", http.ListenAndServe(env.Port, nil))
 }

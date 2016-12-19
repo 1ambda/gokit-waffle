@@ -1,16 +1,14 @@
-package transport
+package service
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/1ambda/gokit-waffle/waffle-server/message"
-
 	"golang.org/x/net/context"
 )
 
 func DecodeInsertRequest(_ context.Context, r *http.Request) (interface{}, error) {
-	var req message.InsertRequest
+	var req InsertRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, err

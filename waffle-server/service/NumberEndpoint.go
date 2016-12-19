@@ -1,19 +1,16 @@
-package endpoint
+package service
 
 import (
-	"github.com/1ambda/gokit-waffle/waffle-server/message"
-	"github.com/1ambda/gokit-waffle/waffle-server/service"
-
 	"github.com/go-kit/kit/endpoint"
 	"golang.org/x/net/context"
 )
 
-func CreateInsertionEndpoint(svc service.NumberService) endpoint.Endpoint {
+func CreateInsertionEndpoint(svc NumberService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(message.InsertRequest)
+		req := request.(InsertRequest)
 
 		msg, err := svc.Insert(req.User, req.Number)
-		res := message.InsertResponse{
+		res := InsertResponse{
 			Message: msg, Error: "",
 		}
 

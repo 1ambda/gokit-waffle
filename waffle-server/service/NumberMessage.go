@@ -1,4 +1,4 @@
-package message
+package service
 
 type InsertRequest struct {
 	User   string `json:"user"`
