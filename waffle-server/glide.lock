@@ -1,12 +1,27 @@
-hash: 9efd0b0df8e6824fe03143a57e2802ae906bf31a8c79c7d792f60630fe4ba094
-updated: 2016-12-17T22:22:54.585085686+09:00
+hash: 32eb5b07c59524a4cea5f5cc8dbe2512d75f9bccf588309511e9a3afb6bc83e8
+updated: 2016-12-20T00:22:34.181319853+09:00
 imports:
 - name: github.com/alexflint/go-arg
   version: 7c77c70f8528a7b3310820aeec46d56a5be1ba70
 - name: github.com/go-kit/kit
   version: f66b0e13579bfc5a48b9e2a94b1209c107ea1f41
+  subpackages:
+  - endpoint
+  - log
+  - transport/http
+- name: github.com/go-logfmt/logfmt
+  version: 390ab7935ee28ec6b286364bba9b4dd6410cb3d5
+- name: github.com/go-stack/stack
+  version: 100eb0c0a9c5b306ca2fb4f165df21d80ada4b82
+- name: github.com/kr/logfmt
+  version: b84e30acd515aadc4b783ad4ff83aff3299bdfe0
 - name: github.com/pkg/errors
   version: 645ef00459ed84a119197bfb8d8205042c6df63d
+- name: golang.org/x/net
+  version: 4971afdc2f162e82d185353533d3cf16188a9f4e
+  subpackages:
+  - context
+  - context/ctxhttp
 testImports:
 - name: github.com/onsi/ginkgo
   version: 462326b1628e124b23f42e87a8f2750e3c4e2d24

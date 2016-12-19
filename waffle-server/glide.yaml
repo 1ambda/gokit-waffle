@@ -5,6 +5,11 @@ import:
 - package: github.com/pkg/errors
   version: ~0.8.0
 - package: github.com/alexflint/go-arg
+- package: golang.org/x/net
+  subpackages:
+  - context
+- package: github.com/go-logfmt/logfmt
+  version: ~0.3.0
 testImport:
 - package: github.com/onsi/ginkgo
   version: ~1.2.0

@@ -2,3 +2,4 @@ WaffleServer
 dist/
 vendor/
 *.coverprofile
+debug
