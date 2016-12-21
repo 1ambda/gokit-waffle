@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	httptransport "github.com/go-kit/kit/transport/http"
+	"github.com/gorilla/mux"
 	"golang.org/x/net/context"
 )
 
@@ -12,7 +13,7 @@ func NewInsertHandler(ctx context.Context, svc NumberService) http.Handler {
 		ctx,
 		NewInsertEndpoint(svc),
 		DecodeInsertRequest,
-		EncodeInsertResponse,
+		EncodeResponse,
 	)
 }
 
@@ -21,6 +22,19 @@ func NewQueryHandler(ctx context.Context, svc NumberService) http.Handler {
 		ctx,
 		NewQueryEndpoint(svc),
 		DecodeQueryRequest,
-		EncodeQueryResponse,
+		EncodeResponse,
 	)
+}
+
+func NewNumberRouter(ctx context.Context) *mux.Router {
+	numRepo := NewNumberRepository()
+	numSvc := NewNumberService(numRepo)
+	numRoute := mux.NewRouter()
+
+	numInsertHandler := NewInsertHandler(ctx, numSvc)
+	numRoute.Handle("/api/v1/number/insert", numInsertHandler).Methods("POST")
+	numQueryHandler := NewQueryHandler(ctx, numSvc)
+	numRoute.Handle("/api/v1/number/query/{user}", numQueryHandler).Methods("GET")
+
+	return numRoute
 }

@@ -20,7 +20,7 @@ func DecodeInsertRequest(_ context.Context, r *http.Request) (interface{}, error
 	return req, nil
 }
 
-func EncodeInsertResponse(_ context.Context, w http.ResponseWriter, res interface{}) error {
+func EncodeResponse(_ context.Context, w http.ResponseWriter, res interface{}) error {
 	return json.NewEncoder(w).Encode(res)
 }
 
@@ -29,13 +29,9 @@ func DecodeQueryRequest(_ context.Context, r *http.Request) (interface{}, error)
 
 	u, ok := vars["user"]
 	if !ok {
+		// TODO error list
 		return nil, errors.New("Bad Request for DecodeQueryRequest")
 	}
 
 	return QueryRequest{User: u}, nil
-}
-
-func EncodeQueryResponse(_ context.Context, w http.ResponseWriter, res interface{}) error {
-	// TODO: json response encodeer
-	return json.NewEncoder(w).Encode(res)
 }
