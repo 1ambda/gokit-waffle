@@ -18,11 +18,10 @@ BIN			= ${DIST_DIR}/${GOOS}-${GOARCH}/${APP}
 RM		= rm -rf
 GOCMD	= go
 GOGET	= $(GOCMD) get -u -v
-GOLINT	= $(GOCMD) lint
 GOBUILD		= GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build
 GOINSTALL	= $(GOCMD) install
 GODEP	= glide
-GOTES	= ginkgo
+GOTEST	= ginkgo
 GOTEST_OPT	= -r -p -v -cover
 
 # build flags
@@ -39,7 +38,7 @@ all: fclean install lint build-all test
 
 lint:
 	$(GOINSTALL) . # https://github.com/alecthomas/gometalinter/issues/9
-	GO_VENDOR=1 GO15VENDOREXPERIMENT=1 gometalinter --vendor --errors
+	gometalinter --vendor --errors
 
 install:
 	$(GOGET) github.com/Masterminds/glide # for dep
