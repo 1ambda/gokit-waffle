@@ -12,19 +12,24 @@ type NumberService interface {
 
 // numberServiceInst represents NumberService Instance
 type numberServiceInst struct {
-	numberRepository NumberRepository
+	repository NumberRepository
 }
 
-func NewNumberService(nr NumberRepository) NumberService {
+func NewNumberService(r NumberRepository) NumberService {
 	return &numberServiceInst{
-		numberRepository: nr,
+		repository: r,
 	}
 }
 
-func (numberServiceInst) Insert(user string, n int) (string, error) {
-	if user == "" {
+func (svc numberServiceInst) Insert(u string, n int) (string, error) {
+	if u == "" {
 		return "", errors.New("Empty `user`")
 	}
 
-	return fmt.Sprintf("%s inserted %d", user, n), nil
+	user := User(u)
+	number := Number(n)
+	subs := &Submission{user: user, number: number}
+
+	svc.repository.Store(subs)
+	return fmt.Sprintf("%s inserted!: %d", user, number), nil
 }

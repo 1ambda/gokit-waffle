@@ -34,6 +34,7 @@ func main() {
 	// Start
 	ctx := context.Background()
 
-	http.Handle("/api/v1/insert", service.NewInsertHandler(ctx))
+	numRepo := service.NewNumberRepository()
+	http.Handle("/api/v1/insert", service.NewInsertHandler(ctx, numRepo))
 	logger.Log("error", http.ListenAndServe(env.Port, nil))
 }
