@@ -7,5 +7,15 @@ type InsertRequest struct {
 
 type InsertResponse struct {
 	Message string `json:"message"`
-	Error   string `json:"error,omitempty"`
+	Error   error  `json:"error,omitempty"`
+}
+
+type QueryRequest struct {
+	User string
+}
+
+type QueryResponse struct {
+	User  string `json:"user"`
+	Total int    `json:"total"`
+	Error error  `json:"error,omitempty"`
 }

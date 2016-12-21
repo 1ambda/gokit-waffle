@@ -10,15 +10,20 @@ func NewInsertEndpoint(svc NumberService) endpoint.Endpoint {
 		req := request.(InsertRequest)
 
 		msg, err := svc.Insert(req.User, req.Number)
-		res := InsertResponse{
-			Message: msg, Error: "",
-		}
+		res := InsertResponse{Message: msg, Error: err}
 
-		if err != nil {
-			res.Error = err.Error()
-			return res, nil
-		}
+		return res, nil
+	}
+}
 
+func NewQueryEndpoint(svc NumberService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(QueryRequest)
+
+		total, err := svc.Query(req.User)
+		res := QueryResponse{User: req.User, Total: total, Error: err}
+
+		// TODO: test return error
 		return res, nil
 	}
 }

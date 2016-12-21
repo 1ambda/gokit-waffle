@@ -36,9 +36,12 @@ func main() {
 	ctx := context.Background()
 
 	numRepo := service.NewNumberRepository()
-	numHandler := service.NewInsertHandler(ctx, numRepo)
+	numSvc := service.NewNumberService(numRepo)
+	numInsertHandler := service.NewInsertHandler(ctx, numSvc)
+	numQueryHandler := service.NewQueryHandler(ctx, numSvc)
 	numRoute := mux.NewRouter()
-	numRoute.Handle("/api/v1/number/insert", numHandler).Methods("POST")
+	numRoute.Handle("/api/v1/number/insert", numInsertHandler).Methods("POST")
+	numRoute.Handle("/api/v1/number/query/{user}", numQueryHandler).Methods("GET")
 
 	mux := http.NewServeMux()
 	mux.Handle("/api/v1/number/", numRoute)

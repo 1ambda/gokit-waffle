@@ -24,6 +24,10 @@ func (s *Submission) Update(n Number) {
 	s.number += n
 }
 
+func (s *Submission) getTotal() int {
+	return int(s.number)
+}
+
 type NumberRepository interface {
 	Store(s *Submission) error
 	Find(u User) (*Submission, error)
