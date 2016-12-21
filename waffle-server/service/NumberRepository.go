@@ -57,7 +57,7 @@ func (r *numberRepositoryInst) Store(s *Submission) error {
 
 func (r *numberRepositoryInst) Find(u User) (*Submission, error) {
 	r.mtx.RLock()
-	defer r.mtx.Unlock()
+	defer r.mtx.RUnlock()
 
 	s, exist := r.submissions[u]
 	if !exist {
@@ -69,7 +69,7 @@ func (r *numberRepositoryInst) Find(u User) (*Submission, error) {
 
 func (r *numberRepositoryInst) FindAll() []*Submission {
 	r.mtx.RLock()
-	defer r.mtx.Unlock()
+	defer r.mtx.RUnlock()
 
 	ss := make([]*Submission, 0, len(r.submissions))
 	for _, s := range r.submissions {

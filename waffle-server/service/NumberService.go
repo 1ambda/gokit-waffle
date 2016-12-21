@@ -31,5 +31,10 @@ func (svc numberServiceInst) Insert(u string, n int) (string, error) {
 	subs := &Submission{user: user, number: number}
 
 	svc.repository.Store(subs)
-	return fmt.Sprintf("%s inserted!: %d", user, number), nil
+	s, err := svc.repository.Find(user)
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%s has been inserted: %d", user, s.number), nil
 }
