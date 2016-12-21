@@ -5,7 +5,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-func CreateInsertionEndpoint(svc NumberService) endpoint.Endpoint {
+func NewInsertEndpoint(svc NumberService) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(InsertRequest)
 

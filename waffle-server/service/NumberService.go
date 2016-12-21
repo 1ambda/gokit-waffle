@@ -10,10 +10,18 @@ type NumberService interface {
 	Insert(string, int) (string, error)
 }
 
-// NumberServiceInst represents NumberService Instance
-type NumberServiceInst struct{}
+// numberServiceInst represents NumberService Instance
+type numberServiceInst struct {
+	numberRepository NumberRepository
+}
 
-func (NumberServiceInst) Insert(user string, n int) (string, error) {
+func NewNumberService(nr NumberRepository) NumberService {
+	return &numberServiceInst{
+		numberRepository: nr,
+	}
+}
+
+func (numberServiceInst) Insert(user string, n int) (string, error) {
 	if user == "" {
 		return "", errors.New("Empty `user`")
 	}

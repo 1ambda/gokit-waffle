@@ -7,11 +7,11 @@ import (
 	"golang.org/x/net/context"
 )
 
-func CreateInsertHandler(ctx context.Context) http.Handler {
-	svc := NumberServiceInst{}
+func NewInsertHandler(ctx context.Context) http.Handler {
+	svc := numberServiceInst{}
 	return httptransport.NewServer(
 		ctx,
-		CreateInsertionEndpoint(svc),
+		NewInsertEndpoint(svc),
 		DecodeInsertRequest,
 		EncodeInsertResponse,
 	)
