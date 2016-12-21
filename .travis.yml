@@ -13,10 +13,8 @@ cache:
     - $SERVER_APP/vendor
 
 install:
-  - cd $SERVER_APP &&
-    make install &&
-    make build-all &&
-    cd $TRAVIS_BUILD_DIR
+  - echo "TRAVIS_INSTALL"
+  - echo $PWD
 
 script:
-  - cd $SERVER_APP && make build && cd $TRAVIS_BUILD_DIR
+  - cd $SERVER_APP && make && cd $TRAVIS_BUILD_DIR

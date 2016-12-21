@@ -17,12 +17,12 @@ BIN			= ${DIST_DIR}/${GOOS}-${GOARCH}/${APP}
 
 RM		= rm -rf
 GOCMD	= go
-GOBUILD	= GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build
 GOGET	= $(GOCMD) get -u -v
 GOLINT	= $(GOCMD) lint
-GOVET	= $(GOCMD) vet
+GOBUILD		= GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build
+GOINSTALL	= $(GOCMD) install
 GODEP	= glide
-GOTEST		= ginkgo
+GOTES	= ginkgo
 GOTEST_OPT	= -r -p -v -cover
 
 # build flags
@@ -38,8 +38,8 @@ LDFLAGS		= -ldflags="-X ${IMPORTPATH}/config.GitHash=${GITSHA} -X ${IMPORTPATH}/
 all: fclean install lint build-all test
 
 lint:
-	gometalinter --install
-	gometalinter --vendor --errors
+	$(GOINSTALL) . # https://github.com/alecthomas/gometalinter/issues/9
+	GO_VENDOR=1 GO15VENDOREXPERIMENT=1 gometalinter --vendor --errors
 
 install:
 	$(GOGET) github.com/Masterminds/glide # for dep
@@ -47,6 +47,7 @@ install:
 	$(GOGET) github.com/franciscocpg/gox # for cross compile
 	$(GOGET) github.com/githubnemo/CompileDaemon # for reload
 	$(GOGET) github.com/alecthomas/gometalinter # for lint
+	gometalinter --install --update --force
 	$(GODEP) install
 
 build: clean
