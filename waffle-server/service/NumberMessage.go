@@ -10,6 +10,8 @@ type InsertResponse struct {
 	Error   error  `json:"error,omitempty"`
 }
 
+func (r InsertResponse) error() error { return r.Error }
+
 type QueryRequest struct {
 	User string
 }
@@ -19,3 +21,5 @@ type QueryResponse struct {
 	Total int    `json:"total"`
 	Error error  `json:"error,omitempty"`
 }
+
+func (r QueryResponse) error() error { return r.Error }

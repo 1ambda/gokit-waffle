@@ -13,7 +13,7 @@ func NewInsertHandler(ctx context.Context, svc NumberService) http.Handler {
 		ctx,
 		NewInsertEndpoint(svc),
 		DecodeInsertRequest,
-		EncodeResponse,
+		EncodeNumberResponse,
 	)
 }
 
@@ -22,7 +22,7 @@ func NewQueryHandler(ctx context.Context, svc NumberService) http.Handler {
 		ctx,
 		NewQueryEndpoint(svc),
 		DecodeQueryRequest,
-		EncodeResponse,
+		EncodeNumberResponse,
 	)
 }
 

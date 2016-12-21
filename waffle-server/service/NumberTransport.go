@@ -20,10 +20,6 @@ func DecodeInsertRequest(_ context.Context, r *http.Request) (interface{}, error
 	return req, nil
 }
 
-func EncodeResponse(_ context.Context, w http.ResponseWriter, res interface{}) error {
-	return json.NewEncoder(w).Encode(res)
-}
-
 func DecodeQueryRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	vars := mux.Vars(r)
 
@@ -34,4 +30,26 @@ func DecodeQueryRequest(_ context.Context, r *http.Request) (interface{}, error)
 	}
 
 	return QueryRequest{User: u}, nil
+}
+
+type HasError interface {
+	error() error
+}
+
+func EncodeNumberError(_ context.Context, err error, w http.ResponseWriter) {
+	// TODO: switch errors
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"error": err.Error(),
+	})
+}
+
+func EncodeNumberResponse(ctx context.Context, w http.ResponseWriter, res interface{}) error {
+	if e, hasError := res.(HasError); hasError && e.error() != nil {
+		EncodeNumberError(ctx, e.error(), w)
+		return nil
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	return json.NewEncoder(w).Encode(res)
 }
