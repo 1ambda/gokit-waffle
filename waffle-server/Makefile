@@ -9,16 +9,21 @@ ifeq ($(GOOS),)
   endif
 endif
 
-GOCMD		= go
-GOBUILD	= GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build
-GOTEST	= ginkgo -r -cover
-GOTOOL	= $(GOCMD) tool cover
-GOGET		= $(GOCMD) get -u -v
-GODEP		= glide
-RM			= rm -rf
+APP			= WaffleServer
+MAIN		= main.go
+DIST_DIR	= dist
+VENDOR_DIR	= vendor
+BIN			= ${DIST_DIR}/${GOOS}-${GOARCH}/${APP}
 
-APP			  = WaffleServer
-DIST_DIR  = dist
+RM		= rm -rf
+GOCMD	= go
+GOBUILD	= GOOS=$(GOOS) GOARCH=$(GOARCH) $(GOCMD) build
+GOGET	= $(GOCMD) get -u -v
+GOLINT	= $(GOCMD) lint
+GOVET	= $(GOCMD) vet
+GODEP	= glide
+GOTEST		= ginkgo
+GOTEST_OPT	= -r -p -v -cover
 
 # build flags
 IMPORTPATH	= "github.com/1ambda/gokit-waffle/waffle-server"
@@ -28,18 +33,24 @@ BUILDTIME	= $(shell TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ')
 LDFLAGS		= -ldflags="-X ${IMPORTPATH}/config.GitHash=${GITSHA} -X ${IMPORTPATH}/config.BuildTime=${BUILDTIME} -X ${IMPORTPATH}/config.Version=${VERSION}"
 
 # build commands
-.PHONY: all install build build-all test run clean fclean
+.PHONY: all install build build-all test run run-cont clean fclean
 
-all: fclean install build-all test
+all: fclean install lint build-all test
+
+lint:
+	gometalinter --install
+	gometalinter --vendor --errors
 
 install:
 	$(GOGET) github.com/Masterminds/glide # for dep
 	$(GOGET) github.com/onsi/ginkgo/ginkgo # for test
 	$(GOGET) github.com/franciscocpg/gox # for cross compile
+	$(GOGET) github.com/githubnemo/CompileDaemon # for reload
+	$(GOGET) github.com/alecthomas/gometalinter # for lint
 	$(GODEP) install
 
 build: clean
-	$(GOBUILD) $(LDFLAGS) -o ${DIST_DIR}/${GOOS}-${GOARCH}/${APP} -v ./main.go
+	$(GOBUILD) $(LDFLAGS) -i -o ${BIN} -v ${MAIN}
 
 build-all: clean
 	gox -verbose \
@@ -50,10 +61,16 @@ build-all: clean
 	-output="${DIST_DIR}/{{.OS}}-{{.Arch}}/${APP}" .
 
 test:
-	$(GOTEST)
+	$(GOTEST) $(GOTEST_OPT)
+
+test-cont:
+	$(GOTEST) watch $(GOTEST_OPT)
 
 run:
-	./${DIST_DIR}/${GOOS}-${GOARCH}/${APP}
+	${BIN}
+
+run-cont: build
+	CompileDaemon -exclude-dir="${VENDOR_DIR}" -build="make build" -command="make run" -graceful-kill=true
 
 clean:
 	find . -type f -name '*.coverprofile' -exec rm {} +
