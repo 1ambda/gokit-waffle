@@ -5,8 +5,10 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/1ambda/gokit-waffle/waffle-server/service/common"
 	"github.com/gorilla/mux"
 
+	httptransport "github.com/go-kit/kit/transport/http"
 	"golang.org/x/net/context"
 )
 
@@ -20,6 +22,15 @@ func DecodeInsertRequest(_ context.Context, r *http.Request) (interface{}, error
 	return req, nil
 }
 
+func NewInsertHandler(ctx context.Context, svc NumberService) http.Handler {
+	return httptransport.NewServer(
+		ctx,
+		NewInsertEndpoint(svc),
+		DecodeInsertRequest,
+		common.EncodeResponse,
+	)
+}
+
 func DecodeQueryRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	vars := mux.Vars(r)
 
@@ -30,4 +41,13 @@ func DecodeQueryRequest(_ context.Context, r *http.Request) (interface{}, error)
 	}
 
 	return QueryRequest{User: u}, nil
+}
+
+func NewQueryHandler(ctx context.Context, svc NumberService) http.Handler {
+	return httptransport.NewServer(
+		ctx,
+		NewQueryEndpoint(svc),
+		DecodeQueryRequest,
+		common.EncodeResponse,
+	)
 }
