@@ -1,32 +1,11 @@
-package service
+package number
 
 import (
 	"fmt"
 	"sync"
+
+	. "github.com/1ambda/gokit-waffle/waffle-server/service/common"
 )
-
-type User string
-type Number int
-
-type Submission struct {
-	user   User
-	number Number
-}
-
-func NewSubmission(user string, n int) *Submission {
-	return &Submission{
-		user:   User(user),
-		number: Number(n),
-	}
-}
-
-func (s *Submission) Update(n Number) {
-	s.number += n
-}
-
-func (s *Submission) getTotal() int {
-	return int(s.number)
-}
 
 type NumberRepository interface {
 	Store(s *Submission) error
@@ -49,11 +28,11 @@ func (r *numberRepositoryInst) Store(s *Submission) error {
 	r.mtx.Lock()
 	defer r.mtx.Unlock()
 
-	subs, exist := r.submissions[s.user]
+	subs, exist := r.submissions[s.User]
 	if !exist {
-		r.submissions[s.user] = s
+		r.submissions[s.User] = s
 	} else {
-		subs.Update(s.number)
+		subs.Update(s.Number)
 	}
 
 	return nil

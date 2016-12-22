@@ -1,8 +1,10 @@
-package service
+package number
 
 import (
 	"errors"
 	"fmt"
+
+	. "github.com/1ambda/gokit-waffle/waffle-server/service/common"
 )
 
 // NumberService represents the feature: Inserting Number
@@ -29,7 +31,7 @@ func (svc numberServiceInst) Insert(u string, n int) (string, error) {
 
 	user := User(u)
 	number := Number(n)
-	subs := &Submission{user: user, number: number}
+	subs := &Submission{User: user, Number: number}
 
 	svc.repository.Store(subs)
 	s, err := svc.repository.Find(user)
@@ -37,7 +39,7 @@ func (svc numberServiceInst) Insert(u string, n int) (string, error) {
 		return "", err
 	}
 
-	return fmt.Sprintf("%s has been inserted: %d", user, s.number), nil
+	return fmt.Sprintf("%s has been inserted: %d", user, s.Number), nil
 }
 
 func (svc numberServiceInst) Query(u string) (int, error) {
@@ -51,5 +53,5 @@ func (svc numberServiceInst) Query(u string) (int, error) {
 		return 0, err
 	}
 
-	return subs.getTotal(), err
+	return subs.GetTotal(), err
 }

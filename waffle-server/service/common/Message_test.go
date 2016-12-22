@@ -1,7 +1,7 @@
-package service_test
+package common_test
 
 import (
-	. "github.com/1ambda/gokit-waffle/waffle-server/service"
+	. "github.com/1ambda/gokit-waffle/waffle-server/service/common"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
