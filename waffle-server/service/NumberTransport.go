@@ -32,10 +32,6 @@ func DecodeQueryRequest(_ context.Context, r *http.Request) (interface{}, error)
 	return QueryRequest{User: u}, nil
 }
 
-type HasError interface {
-	error() error
-}
-
 func EncodeNumberError(_ context.Context, err error, w http.ResponseWriter) {
 	// TODO: switch errors
 
