@@ -13,18 +13,16 @@ type NumberService interface {
 	Query(string) (int, error)
 }
 
-// numberServiceInst represents NumberService Instance
-type numberServiceInst struct {
+// service represents NumberService Instance
+type service struct {
 	repository NumberRepository
 }
 
 func NewNumberService(r NumberRepository) NumberService {
-	return &numberServiceInst{
-		repository: r,
-	}
+	return &service{repository: r}
 }
 
-func (svc numberServiceInst) Insert(u string, n int) (string, error) {
+func (svc service) Insert(u string, n int) (string, error) {
 	if u == "" {
 		return "", errors.New("Empty `user`")
 	}
@@ -42,7 +40,7 @@ func (svc numberServiceInst) Insert(u string, n int) (string, error) {
 	return fmt.Sprintf("%s has been inserted: %d", user, s.Number), nil
 }
 
-func (svc numberServiceInst) Query(u string) (int, error) {
+func (svc service) Query(u string) (int, error) {
 	if u == "" {
 		return 0, errors.New("Empty `user`")
 	}

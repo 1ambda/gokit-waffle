@@ -6,6 +6,7 @@ import (
 
 	"github.com/1ambda/gokit-waffle/waffle-server/config"
 	"github.com/1ambda/gokit-waffle/waffle-server/service"
+	"github.com/1ambda/gokit-waffle/waffle-server/service/number"
 
 	"github.com/go-kit/kit/log"
 	"golang.org/x/net/context"
@@ -35,7 +36,9 @@ func main() {
 	ctx := context.Background()
 
 	mux := http.NewServeMux()
-	mux.Handle("/api/v1/number/", service.NewNumberRouter(ctx))
+	numRepo := number.NewNumberRepository()
+	mux.Handle("/api/v1/number/", service.NewNumberRouter(ctx, numRepo))
+	mux.Handle("/api/v1/user", service.NewUserRouter(ctx, numRepo))
 
 	http.Handle("/", mux)
 
