@@ -8,24 +8,24 @@ import (
 	"golang.org/x/net/context"
 )
 
-func NewNumberRouter(ctx context.Context, r number.NumberRepository) *mux.Router {
-	svc := number.NewNumberService(r)
-	route := mux.NewRouter().StrictSlash(false)
+func RegisterNumberRouter(ctx context.Context, repo number.NumberRepository,
+	apiRoute *mux.Router) {
+	svc := number.NewNumberService(repo)
+	route := apiRoute.PathPrefix("/number").Subrouter()
 
 	insertHandler := number.NewInsertHandler(ctx, svc)
-	route.Handle("/api/v1/number/insert", insertHandler).Methods("POST")
-
-	return route
+	route.Handle("/insert", insertHandler).Methods("POST")
 }
 
-func NewUserRouter(ctx context.Context, r number.NumberRepository) *mux.Router {
-	svc := user.NewUserService(r)
-	route := mux.NewRouter()
+func RegisterUserRouter(ctx context.Context, repo number.NumberRepository,
+	apiRoute *mux.Router) {
+	svc := user.NewUserService(repo)
+	route := apiRoute.PathPrefix("/user").Subrouter()
 
 	usersHandler := user.NewUserListHandler(ctx, svc)
-	route.Handle("/api/v1/user", usersHandler).Methods("GET")
-	userHandler := user.NewUserHandler(ctx, svc)
-	route.Handle("/api/v1/user/{user}", userHandler).Methods("GET")
+	// workaround: https://github.com/gorilla/mux/issues/31
+	apiRoute.Handle("/user", usersHandler).Methods("GET")
 
-	return route
+	userHandler := user.NewUserHandler(ctx, svc)
+	route.Handle("/{user}", userHandler).Methods("GET")
 }
