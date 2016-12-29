@@ -18,3 +18,19 @@ func NewUserListEndpoint(svc UserService) endpoint.Endpoint {
 		return res, nil
 	}
 }
+
+func NewUserEndpoint(svc UserService) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(UserRequest)
+
+		total, err := svc.User(req.User)
+		res := UserResponse{
+			User:        req.User,
+			Total:       total,
+			ErrResponse: *common.NewErrResponse(err),
+		}
+
+		// TODO: test return error
+		return res, nil
+	}
+}

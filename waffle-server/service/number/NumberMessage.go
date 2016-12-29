@@ -13,13 +13,3 @@ type InsertResponse struct {
 	Error   error  `json:"error,omitempty"`
 	common.ErrResponse
 }
-
-type QueryRequest struct {
-	User string
-}
-
-type QueryResponse struct {
-	User  string `json:"user"`
-	Total int    `json:"total"`
-	common.ErrResponse
-}

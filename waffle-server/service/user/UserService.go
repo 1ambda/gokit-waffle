@@ -1,13 +1,15 @@
 package user
 
 import (
+	"errors"
+
 	. "github.com/1ambda/gokit-waffle/waffle-server/service/common"
 	"github.com/1ambda/gokit-waffle/waffle-server/service/number"
 )
 
 type UserService interface {
 	Users() []User
-	// User(string) (int, error)
+	User(string) (int, error)
 }
 
 type service struct {
@@ -26,4 +28,18 @@ func (svc *service) Users() []User {
 	}
 
 	return users
+}
+
+func (svc service) User(u string) (int, error) {
+	if u == "" {
+		return 0, errors.New("Empty `user`")
+	}
+
+	user := User(u)
+	subs, err := svc.repository.Find(user)
+	if err != nil {
+		return 0, err
+	}
+
+	return subs.GetTotal(), err
 }

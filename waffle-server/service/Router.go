@@ -14,8 +14,6 @@ func NewNumberRouter(ctx context.Context, r number.NumberRepository) *mux.Router
 
 	insertHandler := number.NewInsertHandler(ctx, svc)
 	route.Handle("/api/v1/number/insert", insertHandler).Methods("POST")
-	queryHandler := number.NewQueryHandler(ctx, svc)
-	route.Handle("/api/v1/number/query/{user}", queryHandler).Methods("GET")
 
 	return route
 }
@@ -26,6 +24,8 @@ func NewUserRouter(ctx context.Context, r number.NumberRepository) *mux.Router {
 
 	usersHandler := user.NewUserListHandler(ctx, svc)
 	route.Handle("/api/v1/user", usersHandler).Methods("GET")
+	userHandler := user.NewUserHandler(ctx, svc)
+	route.Handle("/api/v1/user/{user}", userHandler).Methods("GET")
 
 	return route
 }

@@ -38,7 +38,7 @@ func main() {
 	mux := http.NewServeMux()
 	numRepo := number.NewNumberRepository()
 	mux.Handle("/api/v1/number/", service.NewNumberRouter(ctx, numRepo))
-	mux.Handle("/api/v1/user", service.NewUserRouter(ctx, numRepo))
+	mux.Handle("/api/v1/user/", service.NewUserRouter(ctx, numRepo))
 
 	http.Handle("/", mux)
 

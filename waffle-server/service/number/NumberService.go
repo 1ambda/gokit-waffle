@@ -10,7 +10,6 @@ import (
 // NumberService represents the feature: Inserting Number
 type NumberService interface {
 	Insert(string, int) (string, error)
-	Query(string) (int, error)
 }
 
 // service represents NumberService Instance
@@ -38,18 +37,4 @@ func (svc service) Insert(u string, n int) (string, error) {
 	}
 
 	return fmt.Sprintf("%s has been inserted: %d", user, s.Number), nil
-}
-
-func (svc service) Query(u string) (int, error) {
-	if u == "" {
-		return 0, errors.New("Empty `user`")
-	}
-
-	user := User(u)
-	subs, err := svc.repository.Find(user)
-	if err != nil {
-		return 0, err
-	}
-
-	return subs.GetTotal(), err
 }
