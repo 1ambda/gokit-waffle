@@ -19,6 +19,6 @@ func (s *Submission) Update(n Number) {
 	s.Number += n
 }
 
-func (s *Submission) GetTotal() int {
+func (s *Submission) GetNumber() int {
 	return int(s.Number)
 }

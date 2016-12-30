@@ -41,5 +41,5 @@ func (svc service) User(u string) (int, error) {
 		return 0, err
 	}
 
-	return subs.GetTotal(), err
+	return subs.GetNumber(), err
 }

@@ -28,3 +28,12 @@ func NewInsertHandler(ctx context.Context, svc NumberService) http.Handler {
 		common.EncodeResponse,
 	)
 }
+
+func NewTotalHandler(ctx context.Context, svc NumberService) http.Handler {
+	return httptransport.NewServer(
+		ctx,
+		NewTotalEndpoint(svc),
+		common.DecodeEmptyRequest,
+		common.EncodeResponse,
+	)
+}

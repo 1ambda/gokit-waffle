@@ -32,6 +32,21 @@ func EncodeError(_ context.Context, err error, w http.ResponseWriter) {
 	})
 }
 
+func DecodeJsonEmptyRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var req interface{}
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+func DecodeEmptyRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	var req interface{}
+	return req, nil
+}
+
 func EncodeResponse(ctx context.Context, w http.ResponseWriter, res interface{}) error {
 	if e, hasError := res.(HasError); hasError && e.error() != nil {
 		EncodeError(ctx, e.error(), w)

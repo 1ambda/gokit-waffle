@@ -15,6 +15,9 @@ func RegisterNumberRouter(ctx context.Context, repo number.NumberRepository,
 
 	insertHandler := number.NewInsertHandler(ctx, svc)
 	route.Handle("/insert", insertHandler).Methods("POST")
+
+	totalHandler := number.NewTotalHandler(ctx, svc)
+	route.Handle("/total", totalHandler).Methods("GET")
 }
 
 func RegisterUserRouter(ctx context.Context, repo number.NumberRepository,

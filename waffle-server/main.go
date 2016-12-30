@@ -43,6 +43,12 @@ func main() {
 	service.RegisterNumberRouter(ctx, numRepo, apiRoute)
 	service.RegisterUserRouter(ctx, numRepo, apiRoute)
 
+	// TODO: graceful shutdown
+	// TODO: accessControl
+	// TODO: /metrics
+	// TODO: globall logging
+	// TODO: Number type: int64
+
 	http.Handle("/", r)
 	logger.Log("error", http.ListenAndServe(env.Port, nil))
 }

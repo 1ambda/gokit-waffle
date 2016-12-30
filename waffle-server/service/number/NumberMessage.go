@@ -10,6 +10,10 @@ type InsertRequest struct {
 
 type InsertResponse struct {
 	Message string `json:"message"`
-	Error   error  `json:"error,omitempty"`
+	common.ErrResponse
+}
+
+type TotalResponse struct {
+	Total int `json:"total"`
 	common.ErrResponse
 }
